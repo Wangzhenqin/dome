@@ -1,82 +1,52 @@
 package com.imooc.manager;
 
-import com.imooc.dao.entity.Area;
-import com.imooc.dao.mybatis.AreaDao;
-import com.imooc.manager.AreaService;
+import com.imooc.common.ListUtil;
+import com.imooc.dao.entity.TitleDO;
+import com.imooc.dao.entity.UserDO;
+import com.imooc.dao.mybatis.TitleDAO;
+import com.imooc.dao.mybatis.UserDAO;
+import com.imooc.entity.Enum.SuccessEnum;
+import com.imooc.entity.dto.TitleDTO;
+import com.imooc.entity.req.GetTitleListReq;
+import com.imooc.entity.resp.GetTitleListResp;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by wangzhenqin on 2019/6/13.
  */
 @Service
-public class TitleServiceManager implements AreaService{
-    private AreaDao areaDao;
-    public TitleServiceManager(AreaDao areaDao){
-        this.areaDao=areaDao;
-    }
-    @Override
-    public List<Area> getAreaList() {
-        return areaDao.queryArea();
-    }
+public class TitleServiceManager{
+    @Autowired
+    UserDAO userDAO;
+    @Autowired
+    TitleDAO titleDAO;
 
-    @Override
-    public Area getAreaById(int areaId) {
-        return areaDao.queryAreaById(areaId);
-    }
-    @Transactional
-    @Override
-    public boolean addArea(Area area) {
-        if (area.getAreaName()!=null && !"".equals(area.getAreaName())){
-            area.setCreateTime(new Date());
-            area.setLastEditTime(new Date());
-            try{
-                int effectedNum=areaDao.insertArea(area);
-                if (effectedNum>0)
-                    return true;
-                else
-                    throw new RuntimeException("插入失败");
-            }catch (Exception e){
-                throw new RuntimeException("插入失败："+e.getMessage());
-            }
-        }else
-            throw new RuntimeException("不能为空");
-    }
-    @Transactional
-    @Override
-    public boolean modifyArea(Area area) {
-        if (area.getAreaId()!=null && area.getAreaId()>0){
-            area.setLastEditTime(new Date());
-            try{
-                int effectedNum=areaDao.updataArea(area);
-                if (effectedNum>0)
-                    return true;
-                else
-                    throw new RuntimeException("更新失败");
-            }catch (Exception e){
-                throw new RuntimeException("更新失败："+e.toString());
-            }
-        }else
-            throw new RuntimeException("不能为空");
-    }
-    @Transactional
-    @Override
-    public boolean deleteArea(int areaId) {
-        if (areaId>0){
-
-            try{
-                int effectedNum=areaDao.deleteArea(areaId);
-                if (effectedNum>0)
-                    return true;
-                else
-                    throw new RuntimeException("删除失败");
-            }catch (Exception e){
-                throw new RuntimeException("删除失败："+e.getMessage());
-            }
-        }else
-            throw new RuntimeException("不能为空");
+    public GetTitleListResp getTitleList(GetTitleListReq req) {
+        GetTitleListResp getTitleListResp = new GetTitleListResp();
+        getTitleListResp.setRet(SuccessEnum.SUCCESS);
+        UserDO userDO = userDAO.getByUserId(req.getUserId());
+        List<TitleDO> titleDOS = titleDAO.getByFacultyId(userDO.getFacultyId(),req.getPage().getPageNum(),req.getPage().getPageSize());
+        int total = titleDAO.countByFacultyId(userDO.getFacultyId());
+        getTitleListResp.setTotal(total);
+        List<Long> teacherIds = titleDOS.stream().map(TitleDO::getTeacherId).collect(Collectors.toList());
+        List<UserDO> userDOS = userDAO.getByUserIds(teacherIds);
+        Map<Long, UserDO> teacherMap = ListUtil.makeMap(userDOS, UserDO::getUserId);
+        List<TitleDTO> titleDTOS =new ArrayList<>();
+        for (TitleDO titleDO : titleDOS) {
+            TitleDTO titleDTO =new TitleDTO();
+            titleDTO.setTitleId(titleDO.getTitleId());
+            titleDTO.setTitleName(titleDO.getTitleName());
+            titleDTO.setContent(titleDO.getContent());
+            titleDTO.setTitleName(teacherMap.get(titleDO.getTeacherId()).getName());
+            titleDTOS.add(titleDTO);
+        }
+        getTitleListResp.setTitle(titleDTOS);
+        return getTitleListResp;
     }
 }

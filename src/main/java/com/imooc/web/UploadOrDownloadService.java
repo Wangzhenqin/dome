@@ -1,7 +1,12 @@
 package com.imooc.web;
 
 import com.imooc.dao.entity.Area;
+import com.imooc.entity.Enum.SuccessEnum;
+import com.imooc.entity.req.EnterReq;
+import com.imooc.entity.resp.EnterResp;
 import com.imooc.manager.AreaService;
+import com.imooc.manager.UploadOrDownloadServiceManager;
+import com.imooc.manager.UserServiceManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,42 +21,17 @@ import java.util.Map;
  * Created by wangzhenqin on 2019/6/13.
  */
 @RestController
-@RequestMapping("/title")
+@RequestMapping("/uploadOrDownload")
 public class UploadOrDownloadService {
     @Autowired
-    private AreaService areaService;
+    private UploadOrDownloadServiceManager uploadOrDownloadServiceManager;
 
-    @RequestMapping(value = "/listarea",method= RequestMethod.GET)
-    private Map<String,Object> listArea(){
-        Map<String,Object> modelMap=new HashMap<String,Object>();
-        List<Area> list=areaService.getAreaList();
-        modelMap.put("areaList",list);
-        return modelMap;
-    }
-    @RequestMapping(value = "/getareabyid",method= RequestMethod.GET)
-    private Map<String,Object> getAreaById(Integer areaId){
-        Map<String,Object> modelMap=new HashMap<String,Object>();
-        Area area=areaService.getAreaById(areaId);
-        modelMap.put("area",area);
-        return modelMap;
-    }
-    @RequestMapping(value = "/addarea",method= RequestMethod.POST)
-    private Map<String,Object> addArea(@RequestBody Area area){
-        Map<String,Object> modelMap=new HashMap<String,Object>();
-        modelMap.put("success",areaService.addArea(area));
-        return modelMap;
-    }
-    @RequestMapping(value = "/modifyarea",method= RequestMethod.POST)
-    private Map<String,Object> modifyArea(@RequestBody Area area){
-        Map<String,Object> modelMap=new HashMap<String,Object>();
-        modelMap.put("success",areaService.modifyArea(area));
-        return modelMap;
-    }
-    @RequestMapping(value = "/removearea",method= RequestMethod.GET)
-    private Map<String,Object> removeArea(Integer areaId){
-        Map<String,Object> modelMap=new HashMap<String,Object>();
-        Area area=areaService.getAreaById(areaId);
-        modelMap.put("success",areaService.deleteArea(areaId));
-        return modelMap;
+    @RequestMapping(value = "/uploadUser",method= RequestMethod.GET)
+    private SuccessEnum uploadUser(String url){
+        try{
+            return uploadOrDownloadServiceManager.uploadUser(url);
+        }catch (Exception e){
+            return SuccessEnum.INNER_ERROR;
+        }
     }
 }

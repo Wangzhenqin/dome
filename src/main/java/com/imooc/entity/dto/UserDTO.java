@@ -1,22 +1,16 @@
-package com.imooc.dao.entity;
+package com.imooc.entity.dto;
 
-
-import java.util.Date;
 
 /**
  * Created by wangzhenqin on 2020/3/22.
  */
-public class UserDO {
+public class UserDTO {
     private Long userId;
     private Integer userType;
     private String name;
-    private String code;
     private Long facultyId;
     private Long phone;
     private String mail;
-    private Integer isDelete;
-    private Date createTime;
-    private Date updateTime;
 
     public Long getUserId() {
         return userId;
@@ -42,14 +36,6 @@ public class UserDO {
         this.name = name;
     }
 
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
     public Long getFacultyId() {
         return facultyId;
     }
@@ -72,29 +58,5 @@ public class UserDO {
 
     public void setMail(String mail) {
         this.mail = mail;
-    }
-
-    public Integer getIsDelete() {
-        return isDelete;
-    }
-
-    public void setIsDelete(Integer isDelete) {
-        this.isDelete = isDelete;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
     }
 }
