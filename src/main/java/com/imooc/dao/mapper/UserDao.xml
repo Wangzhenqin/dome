@@ -8,7 +8,19 @@
         AND is_delect=0
     </select>
 
-    <select id="getByUserId" resultType="com.imooc.dao.entity.UserDO">
+    <update id="updateUserByUserId" parameterType="com.imooc.dao.entity.UserDO">
+        UPDATE t_user
+        SET user_type={userType}
+        AND name={name}
+        AND code={code}
+        AND faculty_id={facultyId}
+        AND phone={phone}
+        AND mail={mail}
+        where user_id={userId}
+        AND is_delect=0
+    </update>
+
+    <select id="getByUserIds" resultType="com.imooc.dao.entity.UserDO">
         SELECT *
         FROM t_user
         where user_id IN

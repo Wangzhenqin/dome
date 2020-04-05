@@ -4,7 +4,6 @@ import com.imooc.dao.entity.Area;
 import com.imooc.entity.Enum.SuccessEnum;
 import com.imooc.entity.req.EnterReq;
 import com.imooc.entity.resp.EnterResp;
-import com.imooc.manager.AreaService;
 import com.imooc.manager.UploadOrDownloadServiceManager;
 import com.imooc.manager.UserServiceManager;
 import org.springframework.beans.factory.annotation.Autowired;

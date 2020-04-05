@@ -1,8 +1,6 @@
 package com.imooc.entity.dto;
 
-import lombok.Data;
 
-@Data
 public class TitleDTO {
     private Long titleId;
     private String titleName;

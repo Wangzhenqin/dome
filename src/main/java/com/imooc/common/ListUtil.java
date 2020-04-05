@@ -1,13 +1,11 @@
 package com.imooc.common;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
 
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.function.Function;
 
-@Slf4j
 public class ListUtil {
     /**
      * Is list empty?

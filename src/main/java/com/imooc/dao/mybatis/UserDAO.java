@@ -21,4 +21,5 @@ public interface UserDAO {
 
     void insert(@Param("list") List<UserDO> userDOS);
 
+    void updateUserByUserId(UserDO userDO);
 }

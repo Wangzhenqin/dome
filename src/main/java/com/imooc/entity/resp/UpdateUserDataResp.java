@@ -3,7 +3,7 @@ package com.imooc.entity.resp;
 import com.imooc.entity.Enum.SuccessEnum;
 import com.imooc.entity.dto.UserDTO;
 
-public class UpdateCodeResp {
+public class UpdateUserDataResp {
    private UserDTO userDTO;
    private SuccessEnum ret;
 
