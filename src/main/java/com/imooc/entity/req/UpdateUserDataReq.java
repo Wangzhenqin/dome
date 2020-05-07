@@ -1,6 +1,5 @@
 package com.imooc.entity.req;
 
-import com.imooc.entity.Enum.SuccessEnum;
 import com.imooc.entity.dto.UserDTO;
 
 public class UpdateUserDataReq {

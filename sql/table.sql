@@ -47,23 +47,21 @@ CREATE TABLE `t_title` (
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`id`),
   UNIQUE INDEX `uniq_oi` (`title_id`),
-  UNIQUE INDEX `uniq_oi` (`student_id`,`teacher_id`),
   INDEX `idx_s` (`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS `t_time`;
 CREATE TABLE `t_time` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
-  `student_id` bigint(20) NOT NULL COMMENT '学生ID',
-  `select_title_time` bigint(20) NOT NULL COMMENT '选题时间',
-  `status_reply_time` bigint(20) COMMENT '开题报告提交时间',
-  `paper_time` bigint(20) COMMENT '论文提交时间',
-  `grade_time` bigint(20) COMMENT '成绩提交时间',
+  `user_id` bigint(20) NOT NULL COMMENT '操作人ID',
+  `event` VARCHAR(32) NOT NULL COMMENT '事件',
+  `start_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '开始时间',
+  `end_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '结束时间',
   `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除: 0,未删除; 1,已删除',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `uniq_oi` (`student_id`)
+  UNIQUE INDEX `uniq_oi` (`event`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS `t_log`;
@@ -75,4 +73,19 @@ CREATE TABLE `t_log` (
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS `t_directory`;
+CREATE TABLE `t_directory` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `directory_id` bigint(20) NOT NULL COMMENT '目录ID',
+  `user_type` VARCHAR(20) NOT NULL COMMENT '用户类型',
+  `name` VARCHAR(20) NOT NULL COMMENT '名字',
+	`path` VARCHAR(20) NOT NULL COMMENT '路由',
+	`management` VARCHAR(20) COMMENT '管理',
+  `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除: 0,未删除; 1,已删除',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`),
+  INDEX `idx_t` (`user_type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

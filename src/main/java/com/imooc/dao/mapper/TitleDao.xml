@@ -4,17 +4,144 @@
     <select id="getByFacultyId" resultType="com.imooc.dao.entity.TitleDO">
         SELECT *
         FROM t_title
-        where faculty_id={facultyId}
-        AND is_delect=0
+        where status=0
+        AND is_delete=0
+        <if test="facultyId!=null">
+            AND faculty_id=#{facultyId}
+        </if>
         <if test="pageNum!=null and pageSize!=null">
-            limit {pageNum}-1,{pageSize}
+            limit #{pageNum},#{pageSize}
         </if>
     </select>
 
     <select id="countByFacultyId" resultType="java.lang.Integer">
         SELECT count(1)
         FROM t_title
-        where faculty_id={facultyId}
-        AND is_delect=0
+        where faculty_id=#{facultyId}
+        AND status=0
+        AND is_delete=0
+    </select>
+
+    <insert id="insert" parameterType="list">
+        INSERT INTO t_title
+        (title_id,title_name,teacher_id, faculty_id, status,content)
+        VALUES
+        <foreach collection="list" index="index" item="item" separator=",">
+            (#{item.titleId},#{item.titleName}, #{item.teacherId}, #{item.facultyId}, #{item.status}, #{item.content})
+        </foreach>
+    </insert>
+
+    <select id="getByTeacherId" resultType="com.imooc.dao.entity.TitleDO">
+        SELECT *
+        FROM t_title
+        where is_delete=0
+        <if test="teacherId!=null">
+            AND teacher_id=#{teacherId}
+        </if>
+        <if test="pageNum!=null and pageSize!=null">
+            limit #{pageNum},#{pageSize}
+        </if>
+    </select>
+
+    <select id="getByStudentId" resultType="com.imooc.dao.entity.TitleDO">
+        SELECT *
+        FROM t_title
+        where is_delete=0
+        AND student_id=#{studentId}
+    </select>
+
+    <select id="countByTeacherId" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM t_title
+        where is_delete=0
+        <if test="teacherId!=null">
+            AND teacher_id=#{teacherId}
+        </if>
+    </select>
+
+    <select id="getByTitleId" resultType="com.imooc.dao.entity.TitleDO">
+        SELECT *
+        FROM t_title
+        where title_id=#{titleId}
+        AND is_delete=0
+    </select>
+
+    <update id="updateTitleByTitleId" parameterType="com.imooc.dao.entity.TitleDO">
+        UPDATE t_title
+        SET title_name=#{titleName}
+        , content=#{content}
+        , status=#{status}
+        , faculty_id=#{facultyId}
+        <if test="task!=null">
+            , task=#{task}
+        </if>
+        <if test="statusReport!=null">
+            , status_report=#{statusReport}
+        </if>
+        <if test="paper!=null">
+            , paper=#{paper}
+        </if>
+        , teacher_id=#{teacherId}
+        , student_id=#{studentId}
+        where title_id=#{titleId}
+        AND is_delete=0
+    </update>
+
+    <update id="deleteTitleByTitleId">
+        UPDATE t_title
+        SET is_delete=1
+        WHERE title_id=#{titleId}
+    </update>
+
+    <select id="countComfirmTitleByStudentId" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM t_title
+        where is_delete=0
+        AND student_id=#{studentId}
+        AND status=2
+    </select>
+
+    <select id="getByDTO" resultType="com.imooc.dao.entity.TitleDO">
+        SELECT *
+        FROM t_title
+        where is_delete=0
+        <if test="titleDTO.teacherId!=null">
+            AND teacher_id=#{titleDTO.teacherId}
+        </if>
+        <if test="titleDTO.studentId!=null">
+            AND student_id=#{titleDTO.studentId}
+        </if>
+        <if test="titleDTO.titleId!=null">
+            AND title_id=#{titleDTO.titleId}
+        </if>
+        <if test="titleDTO.status!=null">
+            AND status=#{titleDTO.status}
+        </if>
+        <if test="titleDTO.facultyId!=null">
+            AND faculty_id=#{titleDTO.facultyId}
+        </if>
+        <if test="pageNum!=null and pageSize!=null">
+            limit #{pageNum},#{pageSize}
+        </if>
+    </select>
+    <select id="countByDTO" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM t_title
+        where is_delete=0
+        <if test="titleDTO.teacherId!=null">
+            AND teacher_id=#{titleDTO.teacherId}
+        </if>
+        <if test="titleDTO.studentId!=null">
+            AND student_id=#{titleDTO.studentId}
+        </if>
+        <if test="titleDTO.titleId!=null">
+            AND title_id=#{titleDTO.titleId}
+        </if>
+        <if test="titleDTO.status!=null">
+            AND status=#{titleDTO.status}
+        </if>
+        <if test="titleDTO.facultyId!=null">
+            AND faculty_id=#{titleDTO.facultyId}
+        </if>
     </select>
 </mapper>

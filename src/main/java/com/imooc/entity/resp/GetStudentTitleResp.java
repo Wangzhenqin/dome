@@ -3,30 +3,18 @@ package com.imooc.entity.resp;
 import com.imooc.entity.Enum.SuccessEnum;
 import com.imooc.entity.dto.TitleDTO;
 
-
 import java.util.List;
 
-public class GetTitleListResp {
+public class GetStudentTitleResp {
    private List<TitleDTO> title;
    private SuccessEnum ret;
 
    @Override
    public String toString() {
-      return "GetTitleListResp{" +
+      return "GetStudentTitleResp{" +
               "title=" + title +
               ", ret=" + ret +
-              ", total=" + total +
               '}';
-   }
-
-   private int total;
-
-   public int getTotal() {
-      return total;
-   }
-
-   public void setTotal(int total) {
-      this.total = total;
    }
 
    public List<TitleDTO> getTitle() {

@@ -13,7 +13,7 @@ import java.util.List;
 public interface UserDAO {
     UserDO getByUserId(Long userId);
 
-    List<UserDO> getByUserIds(@Param("list") List<Long> teacherIds);
+    List<UserDO> getByUserIds(@Param("list") List<Long> userIds);
 
     void updateCodeByUserId(Long userId, String newCode);
 
@@ -22,4 +22,8 @@ public interface UserDAO {
     void insert(@Param("list") List<UserDO> userDOS);
 
     void updateUserByUserId(UserDO userDO);
+
+    List<UserDO> selectList(@Param("userDO")UserDO userDO, int pageSize, int pageNum);
+
+    int count(@Param("userDO")UserDO userDO);
 }

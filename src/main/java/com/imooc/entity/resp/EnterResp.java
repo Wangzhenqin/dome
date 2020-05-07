@@ -11,6 +11,14 @@ public class EnterResp {
       return userDTO;
    }
 
+   @Override
+   public String toString() {
+      return "EnterResp{" +
+              "userDTO=" + userDTO +
+              ", ret=" + ret +
+              '}';
+   }
+
    public void setUserDTO(UserDTO userDTO) {
       this.userDTO = userDTO;
    }

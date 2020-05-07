@@ -7,53 +7,44 @@ import java.util.Date;
  * Created by wangzhenqin on 2020/3/22.
  */
 public class TimeDO {
-     private Long studentId;
-     private Long selectTitleTime;
-     private Long statusReplyTime;
-     private Long paperTime;
-     private Long gradeTime;
+     private Long userId;
+     private Long startTime;
+     private Long endTime;
+     private String event;
      private Integer isDelete;
      private Date createTime;
      private Date updateTime;
 
-     public Long getStudentId() {
-          return studentId;
+     public Long getUserId() {
+          return userId;
      }
 
-     public void setStudentId(Long studentId) {
-          this.studentId = studentId;
+     public void setUserId(Long userId) {
+          this.userId = userId;
      }
 
-     public Long getSelectTitleTime() {
-          return selectTitleTime;
+     public Long getStartTime() {
+          return startTime;
      }
 
-     public void setSelectTitleTime(Long selectTitleTime) {
-          this.selectTitleTime = selectTitleTime;
+     public void setStartTime(Long startTime) {
+          this.startTime = startTime;
      }
 
-     public Long getStatusReplyTime() {
-          return statusReplyTime;
+     public Long getEndTime() {
+          return endTime;
      }
 
-     public void setStatusReplyTime(Long statusReplyTime) {
-          this.statusReplyTime = statusReplyTime;
+     public void setEndTime(Long endTime) {
+          this.endTime = endTime;
      }
 
-     public Long getPaperTime() {
-          return paperTime;
+     public String getEvent() {
+          return event;
      }
 
-     public void setPaperTime(Long paperTime) {
-          this.paperTime = paperTime;
-     }
-
-     public Long getGradeTime() {
-          return gradeTime;
-     }
-
-     public void setGradeTime(Long gradeTime) {
-          this.gradeTime = gradeTime;
+     public void setEvent(String event) {
+          this.event = event;
      }
 
      public Integer getIsDelete() {

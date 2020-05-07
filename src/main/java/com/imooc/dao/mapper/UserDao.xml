@@ -4,20 +4,20 @@
     <select id="getByUserId" resultType="com.imooc.dao.entity.UserDO">
         SELECT *
         FROM t_user
-        where user_id={userId}
-        AND is_delect=0
+        where user_id=#{userId}
+        AND is_delete=0
     </select>
 
     <update id="updateUserByUserId" parameterType="com.imooc.dao.entity.UserDO">
         UPDATE t_user
-        SET user_type={userType}
-        AND name={name}
-        AND code={code}
-        AND faculty_id={facultyId}
-        AND phone={phone}
-        AND mail={mail}
-        where user_id={userId}
-        AND is_delect=0
+        SET user_type=#{userType}
+        , name=#{name}
+        , code=#{code}
+        , faculty_id=#{facultyId}
+        , phone=#{phone}
+        , mail=#{mail}
+        where user_id=#{userId}
+        AND is_delete=0
     </update>
 
     <select id="getByUserIds" resultType="com.imooc.dao.entity.UserDO">
@@ -27,22 +27,62 @@
         <foreach collection="list" item="item" open="(" close=")" separator=",">
             #{item}
         </foreach>
-        AND is_delect=0
+        AND is_delete=0
+    </select>
+
+    <select id="selectList" resultType="com.imooc.dao.entity.UserDO">
+        SELECT *
+        FROM t_user
+        where is_delete=0
+        <if test="userDO.userId!=null">
+            AND user_id=#{userDO.userId}
+        </if>
+        <if test="userDO.facultyId!=null">
+            AND faculty_id=#{userDO.facultyId}
+        </if>
+        <if test="userDO.userType!=null">
+            AND user_type=#{userDO.userType}
+        </if>
+        <if test="userDO.name!=null">
+            AND name=#{userDO.name}
+        </if>
+        <if test="pageNum!=null and pageSize!=null">
+            limit #{pageNum},#{pageSize}
+        </if>
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM t_user
+        where is_delete=0
+        <if test="userDO.userId!=null">
+            AND user_id=#{userDO.userId}
+        </if>
+
+        <if test="userDO.facultyId!=null">
+            AND faculty_id=#{userDO.facultyId}
+        </if>
+        <if test="userDO.userType!=null">
+            AND user_type=#{userDO.userType}
+        </if>
+        <if test="userDO.name!=null">
+            AND name=#{userDO.name}
+        </if>
     </select>
 
     <update id="updateCodeByUserId">
         UPDATE t_user
         <set>
             <if test="newCode!=null">
-                code={newCode}
+                code=#{newCode}
             </if>
         </set>
         WHERE user_id=#{userId}
     </update>
 
-    <update id="updateCodeByUserId">
+    <update id="delectUserByUserId">
         UPDATE t_user
-        SET is_delect=1
+        SET is_delete=1
         WHERE user_id=#{userId}
     </update>
 

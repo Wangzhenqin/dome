@@ -3,24 +3,24 @@ package com.imooc.entity.resp;
 import com.imooc.entity.Enum.SuccessEnum;
 import com.imooc.entity.dto.UserDTO;
 
-public class UpdateUserDataResp {
+public class UploadStudentFileResp {
+   private String url;
+   private SuccessEnum ret;
+
    @Override
    public String toString() {
-      return "UpdateUserDataResp{" +
-              "userDTO=" + userDTO +
+      return "UploadStudentFileResp{" +
+              "url='" + url + '\'' +
               ", ret=" + ret +
               '}';
    }
 
-   private UserDTO userDTO;
-   private SuccessEnum ret;
-
-   public UserDTO getUserDTO() {
-      return userDTO;
+   public String getUrl() {
+      return url;
    }
 
-   public void setUserDTO(UserDTO userDTO) {
-      this.userDTO = userDTO;
+   public void setUrl(String url) {
+      this.url = url;
    }
 
    public SuccessEnum getRet() {

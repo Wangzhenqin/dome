@@ -7,6 +7,11 @@ public enum SuccessEnum {
     SUCCESS(1, "成功"),
     CODE_ERROR(2,"密码错误"),
     FILE_NOT_EXIST(3,"文件不存在"),
+    STUDENT_SELECT_TITLE_MAX(4,"学生选题已到上限"),
+    TITLE_ALREADY_SELECT(5,"题目已被选择"),
+    TITLE_STATUS_ERROR(6,"题目状态错误"),
+    TIME_ERROR(7,"不在时间范围内"),
+    INSUFFICIENT_PRIVILEGES(8,"权限不足"),
     INNER_ERROR(-1, "内部错误");
 
     SuccessEnum(Integer code, String desc) {

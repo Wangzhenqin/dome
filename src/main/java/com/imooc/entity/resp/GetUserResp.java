@@ -1,25 +1,23 @@
 package com.imooc.entity.resp;
 
 import com.imooc.entity.Enum.SuccessEnum;
-import com.imooc.entity.dto.TitleDTO;
-
+import com.imooc.entity.dto.UserDTO;
 
 import java.util.List;
 
-public class GetTitleListResp {
-   private List<TitleDTO> title;
+public class GetUserResp {
+   private List<UserDTO> userDTO;
    private SuccessEnum ret;
+   private int total;
 
    @Override
    public String toString() {
-      return "GetTitleListResp{" +
-              "title=" + title +
+      return "SelectUserResp{" +
+              "userDTO=" + userDTO +
               ", ret=" + ret +
               ", total=" + total +
               '}';
    }
-
-   private int total;
 
    public int getTotal() {
       return total;
@@ -29,12 +27,12 @@ public class GetTitleListResp {
       this.total = total;
    }
 
-   public List<TitleDTO> getTitle() {
-      return title;
+   public List<UserDTO> getUserDTO() {
+      return userDTO;
    }
 
-   public void setTitle(List<TitleDTO> title) {
-      this.title = title;
+   public void setUserDTO(List<UserDTO> userDTO) {
+      this.userDTO = userDTO;
    }
 
    public SuccessEnum getRet() {

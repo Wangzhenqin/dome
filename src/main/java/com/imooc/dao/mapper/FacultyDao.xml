@@ -8,6 +8,12 @@
         <foreach collection="list" item="item" open="(" close=")" separator=",">
             #{item}
         </foreach>
-        AND is_delect=0
+        AND is_delete=0
+    </select>
+
+    <select id="getFacultys" resultType="com.imooc.dao.entity.FacultyDO">
+        SELECT *
+        FROM t_faculty
+        where is_delete=0
     </select>
 </mapper>

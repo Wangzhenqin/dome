@@ -5,13 +5,20 @@ import com.imooc.common.FileUtil;
 import com.imooc.common.ImportUtils;
 import com.imooc.common.ListUtil;
 import com.imooc.dao.entity.FacultyDO;
+import com.imooc.dao.entity.TitleDO;
 import com.imooc.dao.entity.UserDO;
 import com.imooc.dao.mybatis.FacultyDAO;
+import com.imooc.dao.mybatis.TitleDAO;
 import com.imooc.dao.mybatis.UserDAO;
 import com.imooc.entity.Enum.BooleanEnum;
 import com.imooc.entity.Enum.SuccessEnum;
+import com.imooc.entity.Enum.TitleStatusEnum;
 import com.imooc.entity.Enum.UserTypeEnum;
+import com.imooc.entity.dto.TitleExcelDTO;
 import com.imooc.entity.dto.UserExcelDTO;
+import com.imooc.entity.req.UploadStudentFileReq;
+import com.imooc.entity.resp.UpdateUserDataResp;
+import com.imooc.entity.resp.UploadStudentFileResp;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +33,13 @@ import java.util.stream.Collectors;
  * Created by wangzhenqin on 2019/6/13.
  */
 @Service
-public class UploadOrDownloadServiceManager{
+public class UploadOrDownloadServiceManager {
     @Autowired
     FacultyDAO facultyDAO;
     @Autowired
     UserDAO userDAO;
+    @Autowired
+    TitleDAO titleDAO;
 
     public SuccessEnum uploadUser(String url) {
         String filePath = FileUtil.getFilePathFromUrl(url);
@@ -41,14 +50,14 @@ public class UploadOrDownloadServiceManager{
         //读数据
         List<UserExcelDTO> result = this.parse(file, UserExcelDTO.class, true, 0);
         List<FacultyDO> facultyDOS = facultyDAO.getByNames(result.stream().map(UserExcelDTO::getFacultyName).collect(Collectors.toList()));
-        Map<String, FacultyDO> FacultyDOMap = ListUtil.makeMap(facultyDOS, FacultyDO::getFacultName);
-        List<UserDO> userDOS=new ArrayList<>();
+        Map<String, FacultyDO> FacultyDOMap = ListUtil.makeMap(facultyDOS, FacultyDO::getFacultyName);
+        List<UserDO> userDOS = new ArrayList<>();
         for (UserExcelDTO userExcelDTO : result) {
             UserDO userDO = new UserDO();
-            if (userExcelDTO.getUserId()==null||StringUtils.isEmpty(userExcelDTO.getCode())||
-                    StringUtils.isEmpty(userExcelDTO.getName())||
-                    !FacultyDOMap.containsKey(userExcelDTO.getFacultyName())||
-                    UserTypeEnum.getByDesc(userExcelDTO.getUserType())==null){
+            if (userExcelDTO.getUserId() == null || StringUtils.isEmpty(userExcelDTO.getCode()) ||
+                    StringUtils.isEmpty(userExcelDTO.getName()) ||
+                    !FacultyDOMap.containsKey(userExcelDTO.getFacultyName()) ||
+                    UserTypeEnum.getByDesc(userExcelDTO.getUserType()) == null) {
                 continue;
             }
             userDO.setUserId(userExcelDTO.getUserId());
@@ -64,12 +73,13 @@ public class UploadOrDownloadServiceManager{
 
     /**
      * 将 Excel 解析为 JavaBean 对象
-     * @since  2019-04-23 16:07
+     *
      * @param file
      * @param clazz
      * @param beContainTitle 是否包含表头
-     * @param rowIndex 从第几行开始解析，第一行为 0，依次类推
+     * @param rowIndex       从第几行开始解析，第一行为 0，依次类推
      * @return
+     * @since 2019-04-23 16:07
      */
     public static <T> List<T> parse(File file, Class<T> clazz, boolean beContainTitle, int rowIndex) {
         List<List<String>> result = parse(file, beContainTitle, rowIndex);
@@ -80,11 +90,12 @@ public class UploadOrDownloadServiceManager{
 
     /**
      * 将 Excel 解析为 List 集合
-     * @since  2019-04-23 16:11
+     *
      * @param file
      * @param beContainTitle 是否包含表头
-     * @param rowIndex 从第几行开始解析，第一行为 0，依次类推
+     * @param rowIndex       从第几行开始解析，第一行为 0，依次类推
      * @return
+     * @since 2019-04-23 16:11
      */
     public static List<List<String>> parse(File file, boolean beContainTitle, int rowIndex) {
         Sheet sheet = ImportUtils.parseFile(file);
@@ -108,11 +119,12 @@ public class UploadOrDownloadServiceManager{
 
     /**
      * 为对象的每一个属性赋值
-     * @since  2019-04-23 16:10
+     *
      * @param <T>
      * @param clazz
      * @param rowDatas 当前行的数据
      * @return
+     * @since 2019-04-23 16:10
      */
     private static <T> T setField(Class<T> clazz, List<String> rowDatas) {
         try {
@@ -137,11 +149,12 @@ public class UploadOrDownloadServiceManager{
 
     /**
      * 根据 Java 对象的属性的类型，将 Excel 中的值解析为相对应的类型
-     * @since  2019-04-23 16:12
-     * @param field 对象的属性
-     * @param value Excel 中的值
+     *
+     * @param field   对象的属性
+     * @param value   Excel 中的值
      * @param pattern 如果 Java 对象的属性的类型为 Date，使用 pattern 模式将  Excel 中的值转换为 Date 类型
      * @return
+     * @since 2019-04-23 16:12
      */
     @SuppressWarnings("rawtypes")
     private static Object getFieldValue(Field field, String value, String pattern) {
@@ -149,19 +162,19 @@ public class UploadOrDownloadServiceManager{
         Object val = null;
         if (typeClass == Integer.class) {
             val = Integer.valueOf(value);
-        } else if(typeClass == Long.class) {
+        } else if (typeClass == Long.class) {
             val = Long.valueOf(value);
-        } else if(typeClass == Float.class) {
+        } else if (typeClass == Float.class) {
             val = Float.valueOf(value);
-        } else if(typeClass == Double.class) {
+        } else if (typeClass == Double.class) {
             val = Double.valueOf(value);
-        } else if(typeClass == Date.class) {
+        } else if (typeClass == Date.class) {
             val = ImportUtils.getDate(value, pattern);
-        } else if(typeClass == Short.class) {
+        } else if (typeClass == Short.class) {
             val = Short.valueOf(value);
-        } else if(typeClass == Character.class) {
+        } else if (typeClass == Character.class) {
             val = Character.valueOf(value.charAt(0));
-        } else if(typeClass == Boolean.class) {
+        } else if (typeClass == Boolean.class) {
             val = Arrays.asList(BooleanEnum.values()).stream()
                     .filter(x -> x.getName().equals(value.toUpperCase()))
                     .findFirst()
@@ -171,5 +184,65 @@ public class UploadOrDownloadServiceManager{
             val = value;
         }
         return val;
+    }
+
+    public SuccessEnum uploadTitle(String url) {
+        String filePath = FileUtil.getFilePathFromUrl(url);
+        File file = new File(filePath);
+        if (!file.exists()) {
+            return SuccessEnum.FILE_NOT_EXIST;
+        }
+        //读数据
+        List<TitleExcelDTO> result = this.parse(file, TitleExcelDTO.class, true, 0);
+        List<UserDO> userDOS = userDAO.getByUserIds(result.stream().map(TitleExcelDTO::getTeacherId).collect(Collectors.toList()));
+        Map<Long, UserDO> userDOMap = ListUtil.makeMap(userDOS, UserDO::getUserId);
+        List<TitleDO> titleDOS = new ArrayList<>();
+        for (TitleExcelDTO titleExcelDTO : result) {
+            TitleDO titleDO = new TitleDO();
+            if (titleExcelDTO.getTeacherId() == null || StringUtils.isEmpty(titleExcelDTO.getTitleName()) ||
+                    StringUtils.isEmpty(titleExcelDTO.getContent())) {
+                continue;
+            }
+            titleDO.setTitleId(titleExcelDTO.getTeacherId() + System.currentTimeMillis());
+            titleDO.setTitleName(titleExcelDTO.getTitleName());
+            titleDO.setTeacherId(titleExcelDTO.getTeacherId());
+            titleDO.setFacultyId(userDOMap.get(titleExcelDTO.getTeacherId()).getFacultyId());
+            titleDO.setStatus(TitleStatusEnum.NOT_SELECT.getCode());
+            titleDO.setContent(titleExcelDTO.getContent());
+            titleDOS.add(titleDO);
+        }
+        titleDAO.insert(titleDOS);
+        return SuccessEnum.SUCCESS;
+    }
+
+    public UploadStudentFileResp uploadStudentFile(UploadStudentFileReq req) {
+        UploadStudentFileResp resp = new UploadStudentFileResp();
+        resp.setRet(SuccessEnum.SUCCESS);
+        TitleDO titleDO = titleDAO.getByTitleId(req.getTitleId());
+        if (StringUtils.isEmpty(req.getUrl())) {
+            switch (req.getStudentFileEnum()) {
+                case STATUS_REPLY:
+                    resp.setUrl(titleDO.getStatusReport());
+                    break;
+                case PAPER:
+                    resp.setUrl(titleDO.getPaper());
+                    break;
+                default:
+                    resp.setRet(SuccessEnum.FILE_NOT_EXIST);
+            }
+        } else {
+            switch (req.getStudentFileEnum()) {
+                case STATUS_REPLY:
+                    titleDO.setStatusReport(req.getUrl());
+                    break;
+                case PAPER:
+                    titleDO.setPaper(req.getUrl());
+                    break;
+                default:
+                    resp.setRet(SuccessEnum.FILE_NOT_EXIST);
+            }
+            titleDAO.updateTitleByTitleId(titleDO);
+        }
+        return resp;
     }
 }

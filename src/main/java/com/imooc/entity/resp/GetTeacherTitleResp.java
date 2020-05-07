@@ -3,10 +3,9 @@ package com.imooc.entity.resp;
 import com.imooc.entity.Enum.SuccessEnum;
 import com.imooc.entity.dto.TitleDTO;
 
-
 import java.util.List;
 
-public class GetTitleListResp {
+public class GetTeacherTitleResp {
    private List<TitleDTO> title;
    private SuccessEnum ret;
 

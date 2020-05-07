@@ -8,7 +8,7 @@ import java.util.Date;
  */
 public class FacultyDO {
     private Long facultyId;
-    private String facultName;
+    private String facultyName;
     private Integer isDelete;
     private Date createTime;
     private Date updateTime;
@@ -21,12 +21,12 @@ public class FacultyDO {
         this.facultyId = facultyId;
     }
 
-    public String getFacultName() {
-        return facultName;
+    public String getFacultyName() {
+        return facultyName;
     }
 
-    public void setFacultName(String facultName) {
-        this.facultName = facultName;
+    public void setFacultyNamee(String facultyName) {
+        this.facultyName = facultyName;
     }
 
     public Integer getIsDelete() {

@@ -2,19 +2,22 @@ package com.imooc.web;
 
 import com.imooc.entity.Enum.SuccessEnum;
 import com.imooc.entity.req.EnterReq;
+import com.imooc.entity.req.GetUserReq;
+import com.imooc.entity.req.JudgeComeInModuleReq;
 import com.imooc.entity.req.UpdateUserDataReq;
+import com.imooc.entity.resp.DirectoryResp;
 import com.imooc.entity.resp.EnterResp;
+import com.imooc.entity.resp.GetUserResp;
 import com.imooc.entity.resp.UpdateUserDataResp;
 import com.imooc.manager.UserServiceManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by wangzhenqin on 2019/6/13.
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/user")
 public class UserService {
     @Autowired
@@ -27,18 +30,20 @@ public class UserService {
             resp =userServiceManager.enter(req);
             return resp;
         }catch (Exception e){
+            System.out.println("return:"+e);
             resp.setRet(SuccessEnum.INNER_ERROR);
             return resp;
         }
     }
 
-    @RequestMapping(value = "/updateUserData",method= RequestMethod.GET)
-    public UpdateUserDataResp updateUserData(UpdateUserDataReq req){
+    @RequestMapping(value = "/updateUserData",method= RequestMethod.POST)
+    public UpdateUserDataResp updateUserData(@RequestBody UpdateUserDataReq req){
         UpdateUserDataResp resp =new UpdateUserDataResp();
         try{
             resp =userServiceManager.updateUserData(req);
             return resp;
         }catch (Exception e){
+            System.out.println("return:"+e);
             resp.setRet(SuccessEnum.INNER_ERROR);
             return resp;
         }
@@ -49,7 +54,43 @@ public class UserService {
         try{
             return userServiceManager.delectUser(userId);
         }catch (Exception e){
+            System.out.println("return:"+e);
             return SuccessEnum.INNER_ERROR;
+        }
+    }
+
+    @RequestMapping(value = "/selectUser",method= RequestMethod.POST)
+    public GetUserResp selectUser(@RequestBody GetUserReq req){
+        GetUserResp resp =new GetUserResp();
+        try{
+            resp =userServiceManager.selectUser(req);
+            return resp;
+        }catch (Exception e){
+            System.out.println("return:"+e);
+            resp.setRet(SuccessEnum.INNER_ERROR);
+            return resp;
+        }
+    }
+
+    @RequestMapping(value = "/judgeComeInModule",method= RequestMethod.GET)
+    public SuccessEnum judgeComeInModule(JudgeComeInModuleReq req){
+        try{
+            return userServiceManager.judgeComeInModule(req);
+        }catch (Exception e){
+            System.out.println("return:"+e);
+            return SuccessEnum.INNER_ERROR;
+        }
+    }
+
+    @RequestMapping(value = "/getDirectory",method= RequestMethod.GET)
+    public DirectoryResp getDirectory(int userType){
+        DirectoryResp resp =new DirectoryResp();
+        try{
+            return userServiceManager.getDirectory(userType);
+        }catch (Exception e){
+            System.out.println("return:"+e);
+            resp.setRet(SuccessEnum.INNER_ERROR);
+            return resp;
         }
     }
 }
